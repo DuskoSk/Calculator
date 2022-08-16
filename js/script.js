@@ -1,12 +1,14 @@
-const buttons = document.querySelectorAll(".btn");
-const backspace = document.querySelector(".backspace");
-const input = document.querySelector(".input");
-const result = document.querySelector(".result");
+const buttons = document.querySelectorAll(`.btn`);
+const backspace = document.querySelector(`.backspace`);
+const input = document.querySelector(`.input`);
+const result = document.querySelector(`.result`);
 
 let firstNum = null;
 let secondNum = null;
 let operator = null;
-const operators = ["+", "-", "*", "/"];
+input.value = ``;
+result.value = ``;
+const operators = [`+`, `-`, `*`, `/`];
 
 buttons.forEach((item) => {
   item.addEventListener("click", calculate);
@@ -14,8 +16,8 @@ buttons.forEach((item) => {
 
 function calculate() {
   let firstInput = this.value;
-
-  if (firstInput == "AC") {
+  updateDisplay()
+  if (firstInput === `AC`) {
     allClear();
   } else if (operators.includes(firstInput)) {
     input.value = null;
@@ -23,52 +25,50 @@ function calculate() {
     result.value = firstNum;
     operator = firstInput;
     secondNum = null;
-  } else if (firstInput == "=") {
+  } else if (firstInput === `=`) {
     input.value = null;
     firstNum = operate(firstNum, secondNum, operator);
     result.value = firstNum;
     secondNum = null;
-  } else if (firstInput == "+") {
+  } else if (firstInput === `+`) {
     if (secondNum !== null) {
         secondNum = secondNum * 1;
       input.value = secondNum;
     }
-  } else if (firstInput == "-") {
+  } else if (firstInput === `-`) {
     if (secondNum !== null) {
         secondNum = secondNum * -1;
       input.value = secondNum;
     }
-  } else if (firstInput == ".") {
-    if (!input.value.includes(".")) {
+  } else if (firstInput == `.`) {
+    if (!input.value.includes(`.`)) {
       input.value += firstInput;
     }
   } else {
     input.value += firstInput;
     secondNum = Number(input.value);
     input.value = secondNum;
-    return;
   }
 }
 
-function allClear() {
-  input.value ="";
-  result.value = 0;
+allClear = () => {
+  input.value =``;
+  result.value = ``;
   operator = null;
   firstNum = null;
   secondNum = null;
-  return;
 }
 
-function operate(x, y, operator) {
+operate = (x, y, operator) => {
   if (operator === "+") {
     return x + y;
-  } else if (operator === "-") {
+  } else if (operator === `-`) {
     return x - y;
-  } else if (operator === "*") {
+  } else if (operator === `*`) {
     return x * y;
-  } else if (operator === "/") {
+  } else if (operator === `/`) {
     if (y === 0) {
-      return "Can't divide by zero!";
+      return `Can't divide by zero!`;
     } else {
       return (x / y);
     }
@@ -77,9 +77,23 @@ function operate(x, y, operator) {
   }
 }
 
-function backspaceToggle(input) {
-  input.value = input.value.toString().slice(0, -1)
-}
 backspace.addEventListener('click', button => {
   backspaceToggle(input);
 })
+
+backspaceToggle = (input, result, firstNum, secondNum) => {
+  let inputA = input.value;
+  if (input.value === `0` || input.value === ``) {
+    return;
+  } else {
+    inputA.innerText = inputA.innerText.toString().slice(0, - 1);
+  }
+  updateDisplay();
+}
+
+
+updateDisplay = () => {
+  input.value.innerText = input.value;
+  result.value.innerText = result.value;
+}
+
